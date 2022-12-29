@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lego Store</string>
+    <string name="prefs_file">com.david4vilac.legostore.PREFERENCE_FILE_KEY</string>
 </resources>

@@ -8,4 +8,5 @@ data class Product(
     @SerializedName("unit_price") val unit_price: Int,
     @SerializedName("stock") val stock: Int,
     @SerializedName("image") val image: String,
+    @SerializedName("description") val description: String
     )
