@@ -20,8 +20,8 @@ import com.david4vilac.legostore.model.ProductList
 //import com.david4vilac.lifecycle.SongPrefs.Companion.prefs
 
 
-class ProductAdapter(val products: List<Product>, val con: HomeActivity)
-    :RecyclerView.Adapter<ProductAdapter.ViewHolder>(){
+class ShopAdapter(val products: List<Product>, val con: HomeActivity)
+    :RecyclerView.Adapter<ShopAdapter.ViewHolder>(){
 
     private lateinit var context: Context
     class ViewHolder(v: View): RecyclerView.ViewHolder(v){

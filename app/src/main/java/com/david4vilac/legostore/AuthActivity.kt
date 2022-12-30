@@ -5,35 +5,52 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.Switch
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.david4vilac.legostore.databinding.ActivityAuthBinding
-import com.david4vilac.legostore.model.Product
-import com.david4vilac.legostore.network.APIService
-import com.david4vilac.legostore.usecases.rows.ProductAdapter
+import com.david4vilac.legostore.usecases.preferences.SaveTheme
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthBinding
+    private lateinit var saveTheme: SaveTheme
+    private var switch : Switch? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //Share preference state look
+        saveTheme = SaveTheme(this)
+        if(saveTheme.loadDarkModeState() == true){
+            setTheme(R.style.Theme_LegoStore)
+        }else{
+            setTheme(R.style.ThemeLegoDark)
+        }
+
+
         super.onCreate(savedInstanceState)
-
-
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        switch = findViewById<View>(R.id.swTema) as Switch?
+        if(saveTheme.loadDarkModeState() == true){
+            switch!!.isChecked = true
+        }
+
+        switch!!.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                saveTheme.setDarkModeState(true)
+                restartApplication()
+            }else{
+                saveTheme.setDarkModeState(false)
+                restartApplication()
+            }
+        }
+
+
 
         val analytics = FirebaseAnalytics.getInstance(this)
         val bundle = Bundle()
@@ -48,6 +65,12 @@ class AuthActivity : AppCompatActivity() {
         session()
 
 
+    }
+
+    private fun restartApplication(){
+        val i = Intent(this, AuthActivity::class.java)
+        startActivity(i)
+        finish()
     }
 
     private fun session(){
@@ -65,13 +88,13 @@ class AuthActivity : AppCompatActivity() {
         val signUpButton: Button = findViewById(R.id.signUpBtn)
         val logInBtn: Button = findViewById(R.id.logInBtn)
 
-        val editTextEmail: EditText = findViewById(R.id.editTextEmail)
-        val passwordEditText: EditText = findViewById(R.id.passwordEditText)
+        val editTextEmail: TextInputLayout  = findViewById(R.id.editTextEmail)
+        val passwordEditText: TextInputLayout  = findViewById(R.id.passwordEditText)
 
-        signUpButton.setOnClickListener {
-            if(editTextEmail.text.isNotEmpty() && passwordEditText.text.isNotEmpty()  ){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.text.toString(),
-                    passwordEditText.text.toString()).addOnCompleteListener {
+        /*signUpButton.setOnClickListener {
+            if(editTextEmail.text.toString().isNotEmpty() && passwordEditText.text.isNotEmpty()  ){
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.toString(),
+                    passwordEditText.toString()).addOnCompleteListener {
                         if(it.isSuccessful){
                             showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
                         }else{
@@ -79,27 +102,34 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
             }
-        }
+        }*/
+
+        //validacion
 
         logInBtn.setOnClickListener {
-            if(editTextEmail.text.isNotEmpty() && passwordEditText.text.isNotEmpty()  ){
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextEmail.text.toString(),
-                    passwordEditText.text.toString()).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
-                    }else{
-                        showAlert()
-                    }
+            if(editTextEmail.editText!!.text.trim().isEmpty()){
+                editTextEmail.error = "Ingrese el email"
+            }else if(passwordEditText.editText!!.text.trim().isEmpty()){
+                    passwordEditText.error = "Ingrese su contraseña"
+            }else{
+                if(editTextEmail.editText!!.text.isNotEmpty() && passwordEditText.editText!!.text.isNotEmpty()){
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextEmail.editText!!.text.toString(),
+                        passwordEditText.editText!!.text.toString()).addOnCompleteListener {
+                        if(it.isSuccessful){
+                            showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
+                        }else{
+                            showAlert(editTextEmail.editText!!.text.toString())
+                            }
+                        }
                 }
             }
-
         }
     }
 
-    private fun showAlert(){
+    private fun showAlert(string: String){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
-        builder.setMessage("Se ha producido un error autenticando al usuario")
+        builder.setMessage("Se ha producido un error autenticando al usuario $string")
         builder.setPositiveButton("Aceptar", null)
 
         val dialog: AlertDialog = builder.create()

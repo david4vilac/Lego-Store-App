@@ -4,15 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    android:background="?attr/colorOnPrimary"
+    tools:context=".HomeActivity"
+    >
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,12 +26,14 @@
             android:id="@+id/rvProducts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/card_layout"
+            />
 
 
         <TextView
@@ -40,17 +47,10 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/logOutBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/black"
-                android:text="Cerrar sesion"
 
-                />
         </LinearLayout>
     </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -61,8 +61,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:background="?attr/colorPrimary"
         >
-
-
 
         <ImageView
             android:src="@drawable/ic_perm_identity"
@@ -88,7 +86,8 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre"
+                android:text="Usuario"
+                android:fontFamily="@font/poppins"
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 
@@ -97,31 +96,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
+                android:fontFamily="@font/poppins"
                 android:textColor="@color/white" />
 
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvProgressTwo"
+            android:id="@+id/tvProgressShop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="58dp"
-            android:text="0:00"
+            android:text="0"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/white" />
 
         <ImageButton
-            android:id="@+id/btnPlay2"
+            android:id="@+id/btnPay"
             android:layout_alignParentEnd="true"
             android:background="?attr/colorPrimary"
             android:layout_marginTop="2dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="8dp"
-            android:src="@drawable/ic_payment"
+            android:src="@drawable/ic_shop_store"
             />
     </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/logOutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logout"
+        app:tint="@android:color/white"
+        app:backgroundTint="?attr/colorPrimary"
+        android:layout_gravity="end|bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="65dp"
+        android:layout_marginRight="20dp"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

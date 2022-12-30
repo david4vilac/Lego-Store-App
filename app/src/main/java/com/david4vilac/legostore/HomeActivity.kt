@@ -6,23 +6,21 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputBinding
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.david4vilac.legostore.databinding.ActivityHomeBinding
 import com.david4vilac.legostore.model.Product
+import com.david4vilac.legostore.model.ProductList
 import com.david4vilac.legostore.network.APIService
 import com.david4vilac.legostore.usecases.preferences.ProductPrefs.Companion.prefs
+import com.david4vilac.legostore.usecases.preferences.SaveTheme
 import com.david4vilac.legostore.usecases.rows.ProductAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -35,11 +33,19 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var adapter: ProductAdapter
     private val productList = mutableListOf(Product(9,"Prueba", 7, 8,"https://as01.epimg.net/meristation/imagenes/2022/04/24/reportajes/1650777901_909318_1650786230_noticia_normal.jpg",""))
+    private val productShopList = mutableListOf<Product>()
+    private lateinit var saveTheme: SaveTheme
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        saveTheme = SaveTheme(this)
+        if(saveTheme.loadDarkModeState() == true){
+            setTheme(R.style.Theme_LegoStore)
+        }else{
+            setTheme(R.style.ThemeLegoDark)
+        }
 
+        super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
@@ -56,7 +62,7 @@ class HomeActivity : AppCompatActivity() {
         prefsUser.apply()
 
         initRecyclerView()
-        searchById()
+        getAllProducts()
 
     }
 
@@ -78,13 +84,19 @@ class HomeActivity : AppCompatActivity() {
     private fun setup(email: String, provider: String){
         title = "Inicio"
 
-        val logOutBtn: Button = findViewById(R.id.logOutBtn)
+        val logOutBtn: FloatingActionButton = findViewById(R.id.logOutBtn)
+        val btnPay: ImageButton = findViewById(R.id.btnPay)
 
         val emailTextView: TextView = findViewById(R.id.emailTextView)
         val provierTextView: TextView = findViewById(R.id.provierTextView)
 
         emailTextView.text = email
         provierTextView.text = provider
+
+        btnPay.setOnClickListener {
+            val ShopIntent = Intent(this, ShopActivity::class.java)
+            startActivity(ShopIntent)
+        }
 
         logOutBtn.setOnClickListener {
 
@@ -94,18 +106,20 @@ class HomeActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this, AuthActivity::class.java))
             //onBackPressed()
+            prefs.wipe()
+            finish()
         }
     }
 
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://489a19f7-f7d2-426a-8361-230148034a79.mock.pstmn.io/")
+            .baseUrl("https://677e3cc8-7e90-4f17-a8cc-54c07fc50e40.mock.pstmn.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    private fun searchById(){
+    private fun getAllProducts(){
         CoroutineScope(Dispatchers.IO).launch {
             val call = getRetrofit()
                 .create(APIService::class.java).getAllProducts().execute()
@@ -119,7 +133,6 @@ class HomeActivity : AppCompatActivity() {
                     initRecyclerView()
                 }
             }
-
         }
     }
 
@@ -142,12 +155,15 @@ class HomeActivity : AppCompatActivity() {
                         savePrice(unit_price)
                         saveStock(stock)
                     }
-
                     getProduct()
                 }
             }
-            //Log.d("Respuesta", response.toString() )
         }
+    }
+
+    fun sum(){
+        val tvProgressShop: TextView = findViewById(R.id.tvProgressShop)
+        tvProgressShop.text = ProductList.productShopList.size.toString()
     }
 
     fun getProduct(){
@@ -156,6 +172,5 @@ class HomeActivity : AppCompatActivity() {
         startActivity(DetailProduct)
         //finish()
     }
-
 
 }
