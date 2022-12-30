@@ -64,12 +64,12 @@ class ProductAdapter(val products: List<Product>, val con: HomeActivity)
         with(holder){
             rowProductLinear.setOnClickListener {
                 Toast.makeText(context, "${item.name}", Toast.LENGTH_SHORT).show()
-                con.searchByName(item.id)
+                con.searchById(item.id)
             }
             imBtnAddCard.setOnClickListener {
                 Toast.makeText(context, "Se agrego al carrito ${item.name}", Toast.LENGTH_SHORT).show()
                 ProductList.shoppingCartList(item)
-                con.sum()
+                con.getShoppingSize()
             }
 
             /*imBtnRemoveCard.setOnClickListener {

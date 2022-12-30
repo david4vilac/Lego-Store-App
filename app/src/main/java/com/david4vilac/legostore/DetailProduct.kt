@@ -9,10 +9,13 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.david4vilac.legostore.databinding.ActivityDetailProductBinding
+import com.david4vilac.legostore.model.Product
+import com.david4vilac.legostore.model.ProductList
 import com.david4vilac.legostore.usecases.preferences.ProductPrefs.Companion.prefs
 import com.david4vilac.legostore.usecases.preferences.SaveTheme
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,7 +37,6 @@ class DetailProduct : AppCompatActivity() {
             setTheme(R.style.ThemeLegoDark)
         }
 
-
         super.onCreate(savedInstanceState)
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -46,6 +48,8 @@ class DetailProduct : AppCompatActivity() {
         binding.tvStock.text = "Stock: ${prefs.getStock()}"
         binding.tvDescription.text = "Descripción: ${prefs.getDescription()}"
 
+
+
         binding.emailTextView.text = prefsUser.getString("email", null)
 
         title = prefs.getName()
@@ -54,12 +58,35 @@ class DetailProduct : AppCompatActivity() {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.iVProductDetail)
 
+        binding.btnAddShopping.setOnClickListener {
+
+            val product = Product(0, prefs.getName(),
+                prefs.getPrice(),prefs.getStock(),
+                prefs.getImage(),"")
+            ProductList.productShopList.add(product)
+            preferencesItem()
+        }
+
+        binding.btnPay2.setOnClickListener {
+            val ShopIntent = Intent(this, ShopActivity::class.java)
+            startActivity(ShopIntent)
+        }
 
         logOutBtn.setOnClickListener {
-            prefs.wipe()
-            startActivity(Intent(this, AuthActivity::class.java))
+            //val prefsUser: SharedPreferences.Editor = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+            //prefsUser.clear()
+            //prefsUser.apply()
             FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, AuthActivity::class.java))
+            //onBackPressed()
+            prefs.wipe()
             finish()
         }
+        preferencesItem()
+    }
+
+    private fun preferencesItem(){
+        val tvProgressTwo: TextView = findViewById(R.id.tvProgressTwo)
+        tvProgressTwo.text = ProductList.productShopList.size.toString()
     }
 }

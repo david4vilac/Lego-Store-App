@@ -32,8 +32,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var adapter: ProductAdapter
-    private val productList = mutableListOf(Product(9,"Prueba", 7, 8,"https://as01.epimg.net/meristation/imagenes/2022/04/24/reportajes/1650777901_909318_1650786230_noticia_normal.jpg",""))
-    private val productShopList = mutableListOf<Product>()
+    private val productList = mutableListOf<Product>()
     private lateinit var saveTheme: SaveTheme
 
 
@@ -62,30 +61,36 @@ class HomeActivity : AppCompatActivity() {
         prefsUser.apply()
 
         initRecyclerView()
-        getAllProducts()
 
+        if (ProductList.productListInit.size == 0){
+            getAllProducts()
+        }
+    }
+
+    private fun restartApplication(){
+        val i = Intent(this, HomeActivity::class.java)
+        startActivity(i)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getShoppingSize()
     }
 
     fun initRecyclerView(){
         val rv = findViewById<RecyclerView>(R.id.rvProducts)
-        rv.adapter = ProductAdapter(productList, this)
+        rv.adapter = ProductAdapter(ProductList.productListInit, this)
         rv.layoutManager = LinearLayoutManager(this)
-        //adapter = ProductAdapter(productList)
-        //binding.rvProducts.layoutManager = LinearLayoutManager(this)
-
-        rv.setOnClickListener {
-            getProduct()
-            Log.d("Respuesta", "Probando click" )
-        }
-
     }
 
 
+
     private fun setup(email: String, provider: String){
-        title = "Inicio"
 
         val logOutBtn: FloatingActionButton = findViewById(R.id.logOutBtn)
         val btnPay: ImageButton = findViewById(R.id.btnPay)
+
+        val ivFooter: ImageView = findViewById(R.id.ivFooter)
 
         val emailTextView: TextView = findViewById(R.id.emailTextView)
         val provierTextView: TextView = findViewById(R.id.provierTextView)
@@ -98,8 +103,12 @@ class HomeActivity : AppCompatActivity() {
             startActivity(ShopIntent)
         }
 
-        logOutBtn.setOnClickListener {
+        ivFooter.setOnClickListener {
+            editAllProducts()
+        }
 
+        logOutBtn.setOnClickListener {
+            ProductList.productShopList.clear()
             val prefsUser: SharedPreferences.Editor = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefsUser.clear()
             prefsUser.apply()
@@ -128,15 +137,31 @@ class HomeActivity : AppCompatActivity() {
             runOnUiThread{
                 if(call.isSuccessful){
                     val productList3 = response?.products ?: emptyList()
-                    productList.clear()
-                    productList.addAll(productList3)
+                    ProductList.productListInit.clear()
+                    ProductList.productListInit.addAll(productList3)
                     initRecyclerView()
                 }
             }
         }
     }
 
-    fun searchByName(id: Int){
+    fun editAllProducts(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = getRetrofit()
+                .create(APIService::class.java).editAllProducts().execute()
+            val response = call.body()
+            Log.d("Respuesta", response?.products.toString())
+            runOnUiThread{
+                if(call.isSuccessful){
+                    val productList3 = response?.products ?: emptyList()
+                    ProductList.productListInit.clear()
+                    ProductList.productListInit.addAll(productList3)
+                }
+            }
+        }
+    }
+
+    fun searchById(id: Int){
         CoroutineScope(Dispatchers.IO).launch {
             val call = getRetrofit()
                 .create(APIService::class.java).getDetailProduct(id).execute()
@@ -161,7 +186,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    fun sum(){
+    fun getShoppingSize(){
         val tvProgressShop: TextView = findViewById(R.id.tvProgressShop)
         tvProgressShop.text = ProductList.productShopList.size.toString()
     }
@@ -170,7 +195,6 @@ class HomeActivity : AppCompatActivity() {
         val DetailProduct = Intent(this, DetailProduct::class.java).apply{
         }
         startActivity(DetailProduct)
-        //finish()
     }
 
 }

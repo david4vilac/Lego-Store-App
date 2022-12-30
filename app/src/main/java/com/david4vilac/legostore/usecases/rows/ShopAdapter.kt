@@ -1,6 +1,7 @@
 package com.david4vilac.legostore.usecases.rows
 
 import android.content.Context
+import android.content.DialogInterface.OnClickListener
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.david4vilac.legostore.model.Product
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.david4vilac.legostore.HomeActivity
 import com.david4vilac.legostore.R
 import com.david4vilac.legostore.model.ProductList
 
 //import com.david4vilac.lifecycle.SongPrefs.Companion.prefs
 
 
-class ShopAdapter(val products: List<Product>, val con: HomeActivity)
+class ShopAdapter(val products: List<Product>,
+                  val onClickListener: (Product) -> Unit,
+                  val onClickDelete:(Int) -> Unit)
     :RecyclerView.Adapter<ShopAdapter.ViewHolder>(){
 
     private lateinit var context: Context
@@ -30,14 +32,12 @@ class ShopAdapter(val products: List<Product>, val con: HomeActivity)
         var tvShock: TextView
         var tvPrice: TextView
         var rowProductLinear: RelativeLayout
-        var imBtnAddCard: ImageButton
-        //var imBtnRemoveCard: ImageButton
+        var imBtnRemoveCard: ImageButton
         init {
             songName = v.findViewById(R.id.tvNameProduct)
             ivProduct = v.findViewById(R.id.ivProduct)
             rowProductLinear = v.findViewById(R.id.rowProductLinear)
-            imBtnAddCard = v.findViewById(R.id.imBtnAddCard)
-            //imBtnRemoveCard = v.findViewById(R.id.imBtnRemoveCard)
+            imBtnRemoveCard = v.findViewById(R.id.imBtnRemoveCard)
             tvShock = v.findViewById(R.id.tvShock)
             tvPrice = v.findViewById(R.id.tvPrice)
         }
@@ -45,7 +45,7 @@ class ShopAdapter(val products: List<Product>, val con: HomeActivity)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context=parent.context
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout_shop, parent, false)
         return ViewHolder(v)
     }
 
@@ -57,26 +57,15 @@ class ShopAdapter(val products: List<Product>, val con: HomeActivity)
         Glide.with(context)
             .load(item.image)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            //.centerCrop()
-            //.circleCrop()
             .into(holder.ivProduct)
 
         with(holder){
-            rowProductLinear.setOnClickListener {
-                Toast.makeText(context, "${item.name}", Toast.LENGTH_SHORT).show()
-                con.searchByName(item.id)
-            }
-            imBtnAddCard.setOnClickListener {
-                Toast.makeText(context, "Se agrego al carrito ${item.name}", Toast.LENGTH_SHORT).show()
-                ProductList.shoppingCartList(item)
-                con.sum()
-            }
 
-            /*imBtnRemoveCard.setOnClickListener {
-                Toast.makeText(context, "Se remueve ${item.name}", Toast.LENGTH_SHORT).show()
-                ProductList.shoppingRemoveItem(item)
-                ShopActivity().onClickDelete(item)
-            }*/
+            imBtnRemoveCard.setOnClickListener {
+                onClickListener(item)
+                onClickDelete(adapterPosition)
+               // ShopActivity().onClickDelete(item)
+            }
         }
 
     }

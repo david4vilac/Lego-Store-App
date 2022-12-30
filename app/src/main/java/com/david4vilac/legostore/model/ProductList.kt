@@ -4,6 +4,7 @@ import android.util.Log
 
 object ProductList {
     val productShopList = mutableListOf<Product>()
+    val productListInit = mutableListOf<Product>()
 
 
     fun setProductShopList():List<Product>{

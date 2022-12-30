@@ -87,6 +87,7 @@
                 />
 
             <Button
+                android:id="@+id/btnAddShopping"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="agregar al carrito"
@@ -162,7 +163,7 @@
             android:textColor="@color/white" />
 
         <ImageButton
-            android:id="@+id/btnPlay2"
+            android:id="@+id/btnPay2"
             android:layout_alignParentEnd="true"
             android:background="?attr/colorPrimary"
             android:layout_marginTop="2dp"

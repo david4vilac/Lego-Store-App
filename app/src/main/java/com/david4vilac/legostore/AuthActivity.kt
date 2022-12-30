@@ -50,20 +50,15 @@ class AuthActivity : AppCompatActivity() {
             }
         }
 
-
-
         val analytics = FirebaseAnalytics.getInstance(this)
         val bundle = Bundle()
 
         bundle.putString("message", "Integración con FB completa")
         analytics.logEvent("InitScreem", bundle)
 
-
-
         // Setup
         setup()
         session()
-
 
     }
 
@@ -91,18 +86,24 @@ class AuthActivity : AppCompatActivity() {
         val editTextEmail: TextInputLayout  = findViewById(R.id.editTextEmail)
         val passwordEditText: TextInputLayout  = findViewById(R.id.passwordEditText)
 
-        /*signUpButton.setOnClickListener {
-            if(editTextEmail.text.toString().isNotEmpty() && passwordEditText.text.isNotEmpty()  ){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.toString(),
-                    passwordEditText.toString()).addOnCompleteListener {
-                        if(it.isSuccessful){
-                            showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
-                        }else{
-                            showAlert()
-                        }
+        signUpButton.setOnClickListener {
+            if(editTextEmail.editText!!.text.trim().isEmpty()){
+                editTextEmail.error = "Ingrese el email"
+            }else if(passwordEditText.editText!!.text.trim().isEmpty()){
+                passwordEditText.error = "Ingrese su contraseña"
+            }else{
+                if(editTextEmail.editText!!.text.toString().isNotEmpty() && passwordEditText.editText!!.text.isNotEmpty() ){
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(editTextEmail.editText!!.text.toString(),
+                        passwordEditText.editText!!.text.toString()).addOnCompleteListener {
+                            if(it.isSuccessful){
+                                showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
+                            }else{
+                                showAlert(editTextEmail.editText!!.text.toString())
+                            }
+                    }
                 }
             }
-        }*/
+        }
 
         //validacion
 
