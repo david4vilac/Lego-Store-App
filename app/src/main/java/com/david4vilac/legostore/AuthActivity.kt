@@ -13,7 +13,7 @@ import android.widget.Switch
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.david4vilac.legostore.databinding.ActivityAuthBinding
-import com.david4vilac.legostore.usecases.preferences.SaveTheme
+import com.david4vilac.legostore.provider.preferences.SaveTheme
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth

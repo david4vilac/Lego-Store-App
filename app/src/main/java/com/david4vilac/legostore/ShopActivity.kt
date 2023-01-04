@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.david4vilac.legostore.databinding.ActivityShopBinding
 import com.david4vilac.legostore.model.Product
 import com.david4vilac.legostore.model.ProductList
-import com.david4vilac.legostore.usecases.preferences.ProductPrefs
-import com.david4vilac.legostore.usecases.preferences.SaveTheme
+import com.david4vilac.legostore.provider.preferences.ProductPrefs
+import com.david4vilac.legostore.provider.preferences.SaveTheme
 import com.david4vilac.legostore.usecases.rows.ShopAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth

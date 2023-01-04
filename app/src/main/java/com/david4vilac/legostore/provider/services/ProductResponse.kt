@@ -1,4 +1,4 @@
-package com.david4vilac.legostore.network
+package com.david4vilac.legostore.provider.services
 
 import com.david4vilac.legostore.model.Product
 import com.google.gson.annotations.SerializedName

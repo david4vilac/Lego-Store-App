@@ -1,4 +1,4 @@
-package com.david4vilac.legostore.usecases.preferences
+package com.david4vilac.legostore.provider.preferences
 
 import android.content.SharedPreferences
 import android.content.Context

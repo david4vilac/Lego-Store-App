@@ -16,8 +16,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.david4vilac.legostore.databinding.ActivityDetailProductBinding
 import com.david4vilac.legostore.model.Product
 import com.david4vilac.legostore.model.ProductList
-import com.david4vilac.legostore.usecases.preferences.ProductPrefs.Companion.prefs
-import com.david4vilac.legostore.usecases.preferences.SaveTheme
+import com.david4vilac.legostore.provider.preferences.ProductPrefs.Companion.prefs
+import com.david4vilac.legostore.provider.preferences.SaveTheme
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 
