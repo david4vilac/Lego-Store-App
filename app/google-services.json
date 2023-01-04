@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "654210190584",
-    "project_id": "legoshop-1282e",
-    "storage_bucket": "legoshop-1282e.appspot.com"
+    "project_number": "45921561296",
+    "project_id": "prueba-alternova-54742",
+    "storage_bucket": "prueba-alternova-54742.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:654210190584:android:b51f3391d7ac39908e3f0d",
+        "mobilesdk_app_id": "1:45921561296:android:0558872b01beb54ccd4cd5",
         "android_client_info": {
           "package_name": "com.david4vilac.legostore"
         }
       },
       "oauth_client": [
         {
-          "client_id": "654210190584-he0gvtav8kviijpr9n9smr043v9bbv27.apps.googleusercontent.com",
+          "client_id": "45921561296-tkrht02upar1lbsjjuaq67ksur2sqngn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBH-PK0dsRBGmPwuQZb5oIZQjFRAGE2-i0"
+          "current_key": "AIzaSyAmRJFj_1kpocB_XomVu5i8rrVxY4RN-Sc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "654210190584-he0gvtav8kviijpr9n9smr043v9bbv27.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:654210190584:android:900723d4021c75ec8e3f0d",
-        "android_client_info": {
-          "package_name": "com.david4vilac.legostorefragment"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "654210190584-he0gvtav8kviijpr9n9smr043v9bbv27.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBH-PK0dsRBGmPwuQZb5oIZQjFRAGE2-i0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "654210190584-he0gvtav8kviijpr9n9smr043v9bbv27.apps.googleusercontent.com",
+              "client_id": "45921561296-tkrht02upar1lbsjjuaq67ksur2sqngn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

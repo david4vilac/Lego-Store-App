@@ -3,23 +3,28 @@ package com.david4vilac.legostore
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Switch
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.david4vilac.legostore.databinding.ActivityAuthBinding
 import com.david4vilac.legostore.usecases.preferences.SaveTheme
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 
+
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthBinding
     private lateinit var saveTheme: SaveTheme
     private var switch : Switch? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Share preference state look
@@ -98,6 +103,7 @@ class AuthActivity : AppCompatActivity() {
                             if(it.isSuccessful){
                                 showHome(it.result?.user?.email ?: "", ProviderType.BASIC)
                             }else{
+                                Log.d("Nuevo","${ FirebaseAuth.getInstance()}")
                                 showAlert(editTextEmail.editText!!.text.toString())
                             }
                     }
@@ -113,6 +119,7 @@ class AuthActivity : AppCompatActivity() {
             }else if(passwordEditText.editText!!.text.trim().isEmpty()){
                     passwordEditText.error = "Ingrese su contraseña"
             }else{
+                Log.d("Authentication","Autentificando....")
                 if(editTextEmail.editText!!.text.isNotEmpty() && passwordEditText.editText!!.text.isNotEmpty()){
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextEmail.editText!!.text.toString(),
                         passwordEditText.editText!!.text.toString()).addOnCompleteListener {
